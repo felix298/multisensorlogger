@@ -1,8 +1,7 @@
 import cv2
 from datetime import datetime
-import uuid
-import socket
 import time
+from pathlib import Path
 
 #IP = "127.0.0.1"
 #PORT = 65002
@@ -17,14 +16,15 @@ import time
 class CamRecorder():
 
     global vid
-    vid = cv2.VideoCapture(0) # choose which connected camera should be captured
+    vid = cv2.VideoCapture(3) # choose which connected camera should be captured
 
     def __init__(self):
         vid.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
         vid.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-        vid.set(cv2.CAP_PROP_FPS,60)
+        vid.set(cv2.CAP_PROP_FPS,30)
 
-    def start(self, participantID):
+    def start(self, participantID, dataFolder):
+        Path(dataFolder + "\\" + participantID + "\\cam\\").mkdir(parents=True, exist_ok=True)
         while(True):
             
             # Capture the video frame by frame
@@ -35,7 +35,7 @@ class CamRecorder():
             #timestampStr = dateTimeObj.strftime("%Y-%m-%d_%H-%M-%S-%f")
             t = time.time()
             t_ms = int(t * 1000)
-            cv2.imwrite("C:\\Users\\whoop\\Desktop\\working-dir\\deepfake\\" + participantID + "\\" + str(t_ms) + ".jpg", frame)
+            cv2.imwrite(dataFolder + participantID + "\\cam\\" + str(t_ms) + ".jpg", frame)
             # Display the resulting frame
             cv2.imshow('frame', frame)
             
