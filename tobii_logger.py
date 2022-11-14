@@ -34,6 +34,6 @@ class EyeTracker():
         self.logFile.flush()
         #threadLock.release()
     
-    def start(self, participantID, dataFolder):
-        self.logFile = open(dataFolder + "\\" + str(participantID) + "\\tobii.txt", 'w')
+    def start(self, participantID, condition, dataFolder):
+        self.logFile = open(dataFolder + "\\" + str(participantID) + "\\" + str(condition) + "\\tobii.txt", 'w')
         self.my_eyetracker.subscribe_to(tr.EYETRACKER_GAZE_DATA, self.gaze_data_callback, as_dictionary=True)

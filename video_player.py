@@ -10,8 +10,8 @@ class VideoPlayer():
     def __init__(self):
         print("video started")
     
-    def start(self, participantID, dataFolder, video_path):        
-        logFile = open(dataFolder + "\\" + str(participantID) + "\\videotime.txt", 'w')
+    def start(self, participantID, condition, dataFolder, video_path):        
+        logFile = open(dataFolder + "\\" + str(participantID) + "\\" + str(condition) + "\\videotime.txt", 'w')
         
         # creating vlc media player object
         media_player = vlc.MediaPlayer()

@@ -23,8 +23,8 @@ class CamRecorder():
         vid.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
         vid.set(cv2.CAP_PROP_FPS,30)
 
-    def start(self, participantID, dataFolder):
-        Path(dataFolder + "\\" + participantID + "\\cam\\").mkdir(parents=True, exist_ok=True)
+    def start(self, participantID, condition, dataFolder):
+        Path(dataFolder + "\\" + participantID + "\\" + condition + "\\cam\\").mkdir(parents=True, exist_ok=True)
         while(True):
             
             # Capture the video frame by frame
@@ -35,7 +35,7 @@ class CamRecorder():
             #timestampStr = dateTimeObj.strftime("%Y-%m-%d_%H-%M-%S-%f")
             t = time.time()
             t_ms = int(t * 1000)
-            cv2.imwrite(dataFolder + participantID + "\\cam\\" + str(t_ms) + ".jpg", frame)
+            cv2.imwrite(dataFolder + participantID + "\\" + condition + "\\cam\\" + str(t_ms) + ".jpg", frame)
             # Display the resulting frame
             cv2.imshow('frame', frame)
             
