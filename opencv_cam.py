@@ -16,7 +16,7 @@ from pathlib import Path
 class CamRecorder():
 
     global vid
-    vid = cv2.VideoCapture(3) # choose which connected camera should be captured
+    vid = cv2.VideoCapture(0) # choose which connected camera should be captured
 
     def __init__(self):
         vid.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
