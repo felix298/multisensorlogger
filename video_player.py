@@ -23,11 +23,18 @@ class VideoPlayer():
         media_player.toggle_fullscreen()
         # start playing video
         media_player.play()
-        # wait so the video can be played for 5 seconds
-        # irrespective for length of video
+        lastMediaTimestamp = media_player.get_time()
+        lastTime = time.time()
         while(True):
             t = time.time()
             t_ms = int(t * 1000)
             logFile.write(str(t_ms) + " " + str(media_player.get_time()) + "\n")
             logFile.flush()
             time.sleep(0.1)
+            if time.time() - lastTime > 1:
+                if lastMediaTimestamp == media_player.get_time():
+                    break
+                else:
+                    lastMediaTimestamp = media_player.get_time()
+                lastTime = time.time()
+        media_player.stop()

@@ -14,10 +14,10 @@ def main():
 
     print("Starting...")
     Path(dataFolder + "\\" + participantID + "\\" + condition + "\\").mkdir(parents=True, exist_ok=True)
-    camThread = threading.Thread(target=CamRecorder().start, args=(participantID, condition, dataFolder))
-    camThread.start()
     tobiiThread = threading.Thread(target=EyeTracker().start, args=(participantID, condition, dataFolder))
     tobiiThread.start()
+    camThread = threading.Thread(target=CamRecorder().start, args=(participantID, condition, dataFolder, 0, 1280, 720, 30))
+    camThread.start()
     videoThread = threading.Thread(target=VideoPlayer().start, args=(participantID, condition, dataFolder, video_path))
     videoThread.start()
 
