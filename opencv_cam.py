@@ -19,11 +19,14 @@ class CamRecorder():
         print("cam starting")
 
     def start(self, participantID, condition, dataFolder, cam, width, height, fps):
-        Path(dataFolder + "\\" + participantID + "\\" + condition + "\\" + str(cam) + "cam\\").mkdir(parents=True, exist_ok=True)
+        Path(dataFolder + "\\" + participantID + "\\" + condition + "\\").mkdir(parents=True, exist_ok=True)
         vid = cv2.VideoCapture(cam)
         vid.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         vid.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
         vid.set(cv2.CAP_PROP_FPS, fps)
+        fourcc = cv2.VideoWriter_fourcc('M','P','E','G')
+        videoWriter = cv2.VideoWriter(dataFolder + "\\" + participantID + "\\" + condition + "\\" + str(cam) + "cam.mp4", fourcc, 30.0, (1280,720))
+        timestamps = open(dataFolder + "\\" + participantID + "\\" + condition + "\\camTimestamps.txt", "w")
     
         while(True):
             
@@ -35,7 +38,9 @@ class CamRecorder():
             #timestampStr = dateTimeObj.strftime("%Y-%m-%d_%H-%M-%S-%f")
             t = time.time()
             t_ms = int(t * 1000)
-            cv2.imwrite(dataFolder + participantID + "\\" + condition + "\\" + str(cam) + "cam\\" + str(t_ms) + ".jpg", frame)
+            #cv2.imwrite(dataFolder + participantID + "\\" + condition + "\\" + str(cam) + "cam\\" + str(t_ms) + ".jpg", frame)
+            videoWriter.write(frame)
+            timestamps.write(str(t_ms) + "\n")
             # Display the resulting frame
             cv2.imshow('frame', frame)
             
@@ -47,5 +52,7 @@ class CamRecorder():
         
         # After the loop release the cap object
         vid.release()
+        videoWriter.release()
+        timestamps.close()
         # Destroy all the windows
         cv2.destroyAllWindows()
