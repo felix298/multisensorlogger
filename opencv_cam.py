@@ -18,15 +18,15 @@ class CamRecorder():
     def __init__(self):
         print("cam starting")
 
-    def start(self, participantID, condition, dataFolder, cam, width, height, fps):
-        Path(dataFolder + "\\" + participantID + "\\" + condition + "\\").mkdir(parents=True, exist_ok=True)
+    def start(self, dataFolder, cam, width, height, fps):
+        Path(dataFolder).mkdir(parents=True, exist_ok=True)
         vid = cv2.VideoCapture(cam)
         vid.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         vid.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
         vid.set(cv2.CAP_PROP_FPS, fps)
-        fourcc = cv2.VideoWriter_fourcc('M','P','E','G')
-        videoWriter = cv2.VideoWriter(dataFolder + "\\" + participantID + "\\" + condition + "\\" + str(cam) + "cam.mp4", fourcc, 30.0, (1280,720))
-        timestamps = open(dataFolder + "\\" + participantID + "\\" + condition + "\\camTimestamps.txt", "w")
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        videoWriter = cv2.VideoWriter(dataFolder + str(cam) + "cam.mp4", fourcc, 30.0, (1280,720))
+        timestamps = open(dataFolder + "camTimestamps.txt", "w")
     
         while(True):
             

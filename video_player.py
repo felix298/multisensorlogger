@@ -1,8 +1,4 @@
-import cv2
-import os
-import numpy as np
 import time
-from ffpyplayer.player import MediaPlayer
 import vlc
 
 class VideoPlayer():
@@ -10,8 +6,8 @@ class VideoPlayer():
     def __init__(self):
         print("video started")
     
-    def start(self, participantID, condition, dataFolder, video_path):        
-        logFile = open(dataFolder + "\\" + str(participantID) + "\\" + str(condition) + "\\videotime.txt", 'w')
+    def start(self, dataFolder, video_path):        
+        logFile = open(dataFolder + "videotime.txt", 'w')
         
         # creating vlc media player object
         media_player = vlc.MediaPlayer()
@@ -33,8 +29,9 @@ class VideoPlayer():
             time.sleep(0.1)
             if time.time() - lastTime > 1:
                 if lastMediaTimestamp == media_player.get_time():
+                    media_player.stop()
                     break
                 else:
                     lastMediaTimestamp = media_player.get_time()
                 lastTime = time.time()
-        media_player.stop()
+        
