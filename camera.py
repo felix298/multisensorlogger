@@ -3,14 +3,17 @@ import time
 
 class Camera():
     def __init__(self, data_folder):
+        width = 1920
+        height = 1080
+        fps = 60.0
         self.data_folder = data_folder
         self.cap = cv2.VideoCapture(0)
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-        self.cap.set(cv2.CAP_PROP_FPS, 30)
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+        self.cap.set(cv2.CAP_PROP_FPS, fps)
         self.fourcc = cv2.VideoWriter_fourcc(*'mp4v')
         print("Camera ready")
-        self.out = cv2.VideoWriter(data_folder + "camera_output.mp4", self.fourcc, 30.0, (1280, 720))
+        self.out = cv2.VideoWriter(data_folder + "camera_output.mp4", self.fourcc, fps, (width, height))
         self.stop_playback = False
 
     def start(self):
@@ -33,6 +36,7 @@ class Camera():
         self.out.release()
         self.cap.release()
         timestamps.close()
+        print("Camera stopped")
         cv2.destroyAllWindows()
 
     def stop(self):
