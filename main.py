@@ -1,43 +1,49 @@
 import threading
-from pathlib import Path
-from opencv_cam import CamRecorder
-from tobii_logger import EyeTracker
+import keyboard
+import os
 from video_player import VideoPlayer
-from labrecorder import LabRecorder 
-import time
-import cv2
+from camera import Camera
+from labrecorder import LabRecorder
+from tobii_logger import EyeTracker
 
-participantID:str = "0"
-condition:str = "A"
-video_path:str = f"\\videos\\{condition}.mp4"
-dataFolder:str = f"C:\\Users\\rawex\\Documents\\Studie\\{condition}\\{participantID}\\"
 
-def stop_recording():
-    EyeTracker().stop()
-    LabRecorder().stop()
 
 def main():
+    participant_id:str = "1"
+    condition:str = "B"
+    study_path = "C:/Users/rawex/Documents/Studie"
+    video_filename = f"{condition}.mp4"
+    video_filepath = os.path.join("C:/Users/rawex/Documents/multisensorlogger-main/multisensorlogger/videos", video_filename)
+    data_folder = os.path.join(study_path, f"{condition}/{participant_id}/")
+    os.makedirs(os.path.dirname(data_folder), exist_ok=True)
 
-    print("Starting...")
-    tobiiThread = threading.Thread(target=EyeTracker().start, args=(dataFolder,))
-    tobiiThread.start()
-    camThread = threading.Thread(target=CamRecorder().start, args=(dataFolder, 0, 1280, 720, 30))
-    camThread.start()
-    labrecorderThread = threading.Thread(target=LabRecorder().start, args=(participantID, dataFolder))
-    labrecorderThread.start()
-    time.sleep(30)
-    videoThread = threading.Thread(target=VideoPlayer().start, args=(dataFolder, video_path))
-    videoThread.start()
+    recorder = LabRecorder(participant_id, data_folder)
+    tracker = EyeTracker(data_folder)
+    cam = Camera(data_folder)
+    player = VideoPlayer(video_filepath, data_folder)
 
-    videoThread.join()
-    tobiiThread.join()
-    camThread.join()
-    labrecorderThread.join()
+    def start_tasks():
+        threading.Thread(target=recorder.start).start()
+        threading.Thread(target=tracker.start).start()
+        threading.Thread(target=cam.start).start()
+        threading.Thread(target=player.start).start()
 
-    #trying to stop Labrecorder at a given time since ctrl+c doesn't work
-    while(True):
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-                stop_recording()
-                exit(0)
+    def stop_tasks():
+        recorder.stop()
+        tracker.stop()
+        cam.stop()
+        player.stop()
+    
+    def end():
+        os._exit(0)
+
+    print("press [Space] to start...")
+
+    keyboard.add_hotkey('space', start_tasks)
+    keyboard.add_hotkey('s', stop_tasks)
+    keyboard.add_hotkey('l', recorder.connect)
+    keyboard.add_hotkey('q', end)
+
+    keyboard.wait()
 
 main()
