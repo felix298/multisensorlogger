@@ -42,6 +42,8 @@ def main():
     keyboard.add_hotkey('space', start_tasks)
     keyboard.add_hotkey('s', stop_tasks)
     keyboard.add_hotkey('l', recorder.connect)
+    keyboard.add_hotkey('c', recorder.setmarker, ('start Calibration'))
+    keyboard.add_hotkey('shift + c', recorder.setmarker, ('end Calibration'))
     keyboard.add_hotkey('q', end)
 
     keyboard.wait()
