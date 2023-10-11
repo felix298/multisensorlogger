@@ -11,13 +11,13 @@ from tobii_logger import EyeTracker
 def main():
     participant_id:str = "1"
     condition:str = "B"
-    study_path = "C:/Users/rawex/Documents/Studie"
-    video_filename = f"{condition}.mp4"
-    video_filepath = os.path.join("C:/Users/rawex/Documents/multisensorlogger-main/multisensorlogger/videos", video_filename)
+    study_path = os.getcwd() + "/../Studie"
+    print(study_path)
+    video_filepath = f"videos/{condition}.mp4"
     data_folder = os.path.join(study_path, f"{condition}/{participant_id}/")
     os.makedirs(os.path.dirname(data_folder), exist_ok=True)
 
-    recorder = LabRecorder(participant_id, data_folder)
+    recorder = LabRecorder(condition, participant_id, data_folder)
     tracker = EyeTracker(data_folder)
     cam = Camera(data_folder)
     player = VideoPlayer(video_filepath, data_folder)
@@ -41,9 +41,8 @@ def main():
 
     keyboard.add_hotkey('space', start_tasks)
     keyboard.add_hotkey('s', stop_tasks)
-    keyboard.add_hotkey('l', recorder.connect)
-    keyboard.add_hotkey('c', recorder.setmarker, ('start Calibration'))
-    keyboard.add_hotkey('shift + c', recorder.setmarker, ('end Calibration'))
+    keyboard.add_hotkey('c', lambda: recorder.setmarker('start calibration'))
+    keyboard.add_hotkey('shift + c', lambda: recorder.setmarker('end calibration'))
     keyboard.add_hotkey('q', end)
 
     keyboard.wait()
