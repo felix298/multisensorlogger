@@ -44,11 +44,15 @@ class LabRecorder:
             print(f"Couldn't write to file: {e}")  
 
     def stop(self):
+        print(self)
         print(self.conn)
         if self.conn is not None:
-            self.conn.sendall(b"select all\n")
-            self.conn.sendall(b"stop\n")
+            try:
+                self.conn.sendall(b"select all\n")
+                self.conn.sendall(b"stop\n")
+                print("Streaming ECG-Data...")
+                print("LabRecorder stopped")
+            except socket.error as e:
+                print(f'Sending commands to Labrecorder failed with error: {e}')
             self.conn.close()
             self.conn = None
-            self.setmarker('stop video')
-            print("LabRecorder stopped")

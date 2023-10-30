@@ -8,11 +8,11 @@ class Camera():
         fps = 60.0
         self.data_folder = data_folder
         self.cap = cv2.VideoCapture(0)
+        print("Camera ready")
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
         self.cap.set(cv2.CAP_PROP_FPS, fps)
-        self.fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        print("Camera ready")
+        self.fourcc = cv2.VideoWriter.fourcc(*'mp4v')
         self.out = cv2.VideoWriter(data_folder + "camera_output.mp4", self.fourcc, fps, (width, height))
         self.stop_playback = False
 
