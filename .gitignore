@@ -1,4 +1,9 @@
-videos/*
+backend/videos/*
 __pycache__
 __pycache__/*
+backend/__pycache__
+backend/__pycache__/*
+backend/modules/__pycache__
+backend/modules/__pycache__/*
+backend/etc/LabRecorder/*
 *.bat

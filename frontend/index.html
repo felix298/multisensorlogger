@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Study Controller</title>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="index.css">
+        <script src="index.js"></script>
+        <script>init()</script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="heading">
+                <h1>Study Controller</h1>
+                <a id="settings-button" onclick="toggle_settings()" ><span id="settings-button-text">A 1</span><img class="icon" src="icons/gear.svg"></a>
+            </div>
+            <div id="settings">
+                <div class="input-wrapper">
+                    <p id="settings-heading">General Setup</p>
+                    <a id="close" onclick="toggle_settings()"><img src="icons/close.svg" alt=""></a>
+                </div>
+                <form onsubmit="set_settings(event)">
+                    <div class="input-wrapper">
+                        <div class="item-wrapper">
+                            <label>Group</label>
+                            <select id="group">
+                                <option>A</option>
+                                <option>B</option>
+                            </select>
+                        </div>
+                        <div class="item-wrapper">
+                            <label>Participant No.</label>
+                            <input id=participant type="number" value="1">
+                        </div>
+                    </div>
+                    <div class="input-wrapper">
+                        <abbr title="Path to the study">Study path</abbr>
+                        <input type="text" class="path" id="study_path" value="paste in path">
+                    </div>
+                    <input type="submit" value="Save">
+                </form>
+            </div>
+            <div id="status">
+                <p id="error-message">Success!</p>
+                <a id="close" onclick="close_error()"><img id="status-icon" src="icons/close.svg" alt=""></a>
+            </div>
+            <div id="controls">
+                <div class="section">
+                    <h2>PolarBand Setup</h2>
+                    <button onclick="call('bluetooth')">
+                        <div class="button_text">
+                            <p class="label">1</p>
+                            Search for PolarBand
+                        </div>
+                        <img id="bluetooth" class="button-icon" src="" alt="">
+                    </button>
+                    <button onclick="call('polarband')">
+                        <div class="button_text">
+                            <p class="label">2</p>
+                            Connect to PolarBand
+                        </div>
+                        <img id="polarband" class="button-icon" src="" alt="">
+                    </button>
+                </div>
+                <div class="section">
+                    <h2>Other Setup</h2>
+                    <button onclick="call('tobii')">
+                        <div class="button_text">
+                            <p class="label">3</p>
+                            Start Tobii Manager
+                        </div>
+                        <img id="tobii" class="button-icon" src="" alt="">
+                    </button>
+                    <button onclick="call('camera')">
+                        <div class="button_text">
+                            <p class="label">4</p>
+                            Test Camera
+                        </div>
+                        <img id="camera" class="button-icon" src="" alt="">
+                    </button>
+                </div>
+                <div class="section">
+                    <h2>Main Study</h2>
+                    <button onclick="call('heartrate')">
+                        <div class="button_text">
+                            <p class="label">5</p>
+                            Measure Resting Heartrate
+                        </div>
+                        <img id="heartrate" class="button-icon" src="" alt="">
+                    </button>
+                    <button onclick="call('start')">
+                        <div class="button_text">
+                            <p class="label">6</p>
+                            Start Study
+                        </div>
+                        <img id="start" class="button-icon" src="" alt="">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
