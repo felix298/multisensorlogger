@@ -7,3 +7,5 @@ backend/modules/__pycache__
 backend/modules/__pycache__/*
 backend/etc/LabRecorder/*
 *.bat
+.DS_Store
+backend/.DS_Store
