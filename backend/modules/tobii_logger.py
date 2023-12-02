@@ -3,9 +3,11 @@ import time
 import threading
 from modules.config import Config
 
-class EyeTracker():
-    def __init__(self):
-        self.data_folder = Config().get("data_folder")
+class EyeTracker(threading.Thread):
+    def __init__(self, config:Config):
+        threading.Thread.__init__(self)
+        self.config = config
+        self.data_folder = config.get("data_folder")
         self.my_eyetracker = tr.find_all_eyetrackers()
 
         if len(self.my_eyetracker) > 0:
@@ -16,18 +18,21 @@ class EyeTracker():
         msg = "{gaze_left_eye};{gaze_right_eye}".format(gaze_left_eye=gaze_data['left_gaze_point_on_display_area'], gaze_right_eye=gaze_data['right_gaze_point_on_display_area'])
         t_ms = int(time.time() * 1000)
         with open(self.data_folder + 'tobii.txt', 'a') as f:
-            f.write(f'{t_ms}\n{gaze_data}\n')
+            f.write(f'{t_ms}\n{msg}\n')
 
-    def start(self):
-        self.thread = threading.Thread(target=self._capture_eyes, daemon=True)
-        self.thread.start()
-
-    def _capture_eyes(self):
+    def run(self):
+        self.exception = None
+        _stop = self.config.get_stop()
         if self.my_eyetracker is not None:
             print("Starting EyeTracker")
-            self.my_eyetracker.subscribe_to(tr.EYETRACKER_GAZE_DATA, self.gaze_data_callback, as_dictionary=True)
-
-    def stop(self):
-        if self.my_eyetracker is not None:
-            print("Stopping EyeTracker")
-            self.my_eyetracker.unsubscribe_from(tr.EYETRACKER_GAZE_DATA, self.gaze_data_callback)
+            try:
+                self.my_eyetracker.subscribe_to(tr.EYETRACKER_GAZE_DATA, self.gaze_data_callback, as_dictionary=True)
+                _stop.wait()
+                self.my_eyetracker.unsubscribe_from(tr.EYETRACKER_GAZE_DATA, self.gaze_data_callback)
+            except BaseException as e:
+                self.exception = e
+        
+    def join(self):
+        threading.Thread.join(self)
+        if self.exception:
+            raise self.exception

@@ -3,7 +3,7 @@ from configparser import ConfigParser
 import asyncio
 from bleak import BleakScanner
 import psutil
-import subprocess
+import threading
 
 class Config():
     def __init__(self):
@@ -13,6 +13,7 @@ class Config():
         self.device_address:str = ""
         self.device_name:str = ""
         self.stream_name = 'ECG'
+        self.event = threading.Event()
 
         config_object = ConfigParser()
         config_object.read('backend/etc/config.ini')
@@ -64,8 +65,11 @@ class Config():
     def start_polar_stream(self):
         psutil.Popen(["python", "backend/etc/polarstream.py", "-a", self.device_address, "-s", self.stream_name])
 
-    def start_tobii(self):
+    def start_tobii_manager(self):
         psutil.Popen()
+
+    def get_stop(self) -> threading.Event:
+        return self.event
 
     def _update_config(self):
         config_object = ConfigParser()
@@ -86,5 +90,5 @@ class Config():
         return devices
     
     def _create_video_and_data_folder_path(self):
-        self.video_filepath = f"videos/{self.condition}.mp4"
+        self.video_filepath = f"backend/videos/{self.condition}.mp4"
         self.data_folder = os.path.join(self.study_path, f"{self.condition}/{self.participant_id}/")
