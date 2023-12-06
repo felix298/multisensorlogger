@@ -1,104 +1,32 @@
-# Lab Recording System
+# Multi Sensor Study Controller
 
-The Lab Recording System is a Python program that allows you to synchronize and record data from LabRecorder, EyeTracker, Camera, and VideoPlayer. It provides a user-friendly interface for starting and stopping the recordings using keyboard shortcuts.
+Welcome to the Multi Sensor Study Controller, a comprehensive Python-based solution designed to synchronize multiple devices including a Tobii eyetracker, a PolarBand H10, and a camera with a video.
 
-## Prerequisites
+## Project Overview
 
-Before running the program, make sure you have the following dependencies installed:
+This project was born out of the necessity to create a usable software for my Bachelor's thesis. The main goal was to develop a system that could seamlessly integrate and synchronize data from multiple sensors, providing a unified platform for data collection and analysis.
 
-- Python 3.x (Python 3.10 or earlier for tobii_research SDK compatibility)
-- OpenCV (cv2)
-- VLC Media Player
-- Tobii Research Python SDK
-- PolarBand2lsl
-- Keyboard module
+## Features
 
-You can install the required Python packages by running the following command:
-
-```
-pip install opencv-python vlc tobii-research keyboard
-```
-
-Please note that Tobii Research Python SDK is only compatible with Python 3.10 or earlier. We recommend to install all dependencies in their own environment with Python 3.10.
-
-
-### VLC Media Player Installation
-
-To enable video playback, you need to have VLC Media Player installed on your system. You can download it from the official website: [https://www.videolan.org/vlc/index.html](https://www.videolan.org/vlc/index.html)
-
-### EKG Setup
-
-For the LabRecorder to work, you need an lsl stream. We used a PolarBand H10 with Bluetooth connection and PolarBand2lsl for the conversion of the stream. Please follow the manufacturer's instructions to connect and set up the PolarBand H10 device.
-
-### PolarBand2lsl Installation and Setup
-
-To enable data streaming from PolarBand H10 to LabRecorder, you need to install and run PolarBand2lsl. You can find the installation instructions and more details on the GitHub repository: [https://github.com/markspan/PolarBand2lsl](https://github.com/markspan/PolarBand2lsl)
-
-## Tobii Pro Lab Configuration
-
-To use the eye tracking functionality, you need to have Tobii Pro Lab installed and running with the eye tracker properly configured. Make sure the eye tracker is connected to your system and recognized by Tobii Pro Lab.
+Tobii Eyetracker Integration: The software can connect and synchronize with Tobii eyetracker, providing real-time eye tracking data. The EyeTracker class in the tobii_logger.py module handles this functionality.
+PolarBand H10 Integration: The software is capable of receiving and processing heart rate data from the PolarBand H10. The ECG class in the ecg.py module is responsible for this.
+Camera and Video Synchronization: The software can synchronize a camera with a video, allowing for simultaneous recording and playback. The Camera class in the camera.py module and the VideoPlayer class in the video_player.py module handle these functionalities.
+Web Frontend: The software provides a web frontend for user interaction, built using Flask. The app.py module contains the Flask application and the routes for the web frontend.
+Getting Started
+To get started with the Multi Sensor Study Controller, you'll need to have Python installed on your machine. Once you've done that, you can clone this repository and install the necessary dependencies.
 
 ## Usage
 
-1. Clone the repository to your local machine.
+The main entry point of the application is the app.py module. Run this module to start the Flask application. The application runs on 0.0.0.0 and port 5555.
 
-2. Open a terminal or command prompt and navigate to the project directory.
+The application provides several endpoints for interacting with the different components of the system. For example, the /config endpoint allows you to get and set the configuration, the /bluetooth endpoint refreshes the device list, and the /start endpoint starts the data collection process.
 
-3. Modify the `main.py` file to set the following variables according to your requirements:
-   - `participant_id`: The ID of the participant.
-   - `condition`: The condition or group of the participant.
-   - `study_path`: The base folder where data will be saved.
-   - `video_filepath`: The path to the video file you want to play during the recording.
+## License
 
-4. Modify the `camera.py` file to set the width height and fps of the camera:
-   - `width`: the width of the camera in px
-   - `height`: the height of the camera in px
-   - `fps`: the frames per second of the camera
-
-5. Run the following command to start the Lab Recording System:
-
-   ```
-   python main.py
-   ```
-
-6. The program will display a message to press the [Space] key to start the recording.
-
-7. Press the [Space] key to start the recordings. The LabRecorder, EyeTracker, Camera, and VideoPlayer will start recording data simultaneously.
-
-8. Press the [S] key to stop the recordings. All data recording will be stopped, and the program will save the recorded data in the specified output folders.
-
-9. Press the [Q] key to exit the program.
-
-## Output
-
-The recorded data will be saved in the following folders:
-
-- LabRecorder data: `study_path/condition/participant_id/labrecorder.txt`
-- EyeTracker data: `study_path/condition/participant_id/tobii.txt`
-- Camera video: `study_path/condition/participant_id/camera_output.avi`
-
-## Troubleshooting
-
-- If you encounter any issues with the video playback, make sure you have VLC Media Player installed on your system and the `vlc` executable is in your system's PATH.
-
-- If the program is not detecting keyboard inputs, try running the program with administrator privileges.
-
-- If you face any issues with the Tobii Research Python SDK, make sure you have installed the compatible version for your Python version and that the eye tracker is properly connected to your system and configured in Tobii Pro Lab.
-
-- If you encounter any problems with the PolarBandEKG and PolarBand2lsl setup, refer to the documentation and troubleshooting guide provided by the manufacturer and on the GitHub repository.
-
-## Contributing
-
-Contributions to the Lab Recording System are welcome. If you find any bugs or want to suggest enhancements, please open an issue on the project's GitHub repository: [https://github.com/felix298/multisensorlogger](https://github.com/felix298/multisensorlogger)
+This project is licensed under the terms of the [INSERT LICENSE HERE]. Feel free to reuse any part of the codebase, as long as it adheres to the license agreement.
 
 ## Acknowledgements
 
-- The Lab Recording System utilizes the following libraries and components:
-  - OpenCV (cv2) for video processing
-  - VLC Media Player for video playback
-  - Tobii Research Python SDK for eye tracking
-  - PolarBandEKG for heart rate monitoring
-  - PolarBand2lsl for data streaming from PolarBandEKG to LabRecorder
-  - Keyboard module for handling keyboard inputs
+I would like to express my gratitude to everyone who contributed to this project and made it a success. Your contributions have been invaluable.
 
-We would like to acknowledge the authors and contributors of these libraries and components for their valuable work.
+Please replace "[INSERT LICENSE HERE]" with the actual license you're using for your project. If you have any specific instructions for installation or usage, or if there are any other details you'd like to include, let me know!

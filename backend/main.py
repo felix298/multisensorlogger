@@ -7,7 +7,7 @@ from modules.config import Config
 from modules.ecg import ECG
 from modules.camera import Camera
 from modules.video_player import VideoPlayer
-# from modules.tobii_logger import EyeTracker
+# from modules.eyetracker import EyeTracker
 
 app = Flask(__name__)
 CORS(app)
