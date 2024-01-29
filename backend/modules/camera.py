@@ -1,6 +1,7 @@
 import threading
 import cv2
 import time
+import os
 from modules.config import Config
 
 class Camera(threading.Thread):
@@ -16,7 +17,7 @@ class Camera(threading.Thread):
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
         self.cap.set(cv2.CAP_PROP_FPS, self.fps)
-        self.fourcc = cv2.VideoWriter.fourcc(*'avc1')
+        self.fourcc = cv2.VideoWriter.fourcc(*'mp4v')
         self.out = cv2.VideoWriter(self.data_folder + "camera_output.mp4", self.fourcc, self.fps, (self.width, self.height))
 
     def test(self):
@@ -29,7 +30,8 @@ class Camera(threading.Thread):
         self.exception = None
         _stop = self.config.get_stop()
         print("Starting Camera")
-        timestamps = open(self.data_folder + "camera_timestamps.txt", "w")
+        stamp_path = self.data_folder + "camera_timestamps.txt"
+        stamps = open(stamp_path, "w" if os.path.isfile(stamp_path) else "x")
         try:
             while(not _stop.isSet()):
                 # Capture the video frame by frame
@@ -38,11 +40,11 @@ class Camera(threading.Thread):
 
                 if ret:
                     self.out.write(frame)
-                    timestamps.write(str(t_ms) + "\n")
+                    stamps.write(str(t_ms) + "\n")
             
             self.out.release()
             self.cap.release()
-            timestamps.close()
+            stamps.close()
             print("Camera stopped")
         except BaseException as e:
             self.exception = e
@@ -50,4 +52,5 @@ class Camera(threading.Thread):
     def join(self):
         threading.Thread.join(self)
         if self.exception:
+            print("Exception in Camera")
             raise self.exception

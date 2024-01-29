@@ -21,7 +21,7 @@
                     <div class="input-wrapper">
                         <div class="item-wrapper">
                             <label>Group</label>
-                            <select id="group">
+                            <select id="group" disabled>
                                 <option>A</option>
                                 <option>B</option>
                             </select>
@@ -37,7 +37,7 @@
                             <div class="tooltip">
                                 <img id="info" src="icons/info.svg">
                                 <span class="tooltip-text">
-                                    Due to limitations it is necessary that you manually copy the path to your study folder into the input 
+                                    Due to limitations it is necessary that you manually copy the path of your study folder into the input 
                                 </span>
                             </div>
                         </div>
@@ -102,6 +102,13 @@
                         <img id="start" class="button-icon" src="" alt="">
                     </button>
                 </div>
+                <button onclick="reset()">
+                    <div class="button_text">
+                        <p class="label">7</p>
+                        Participant finished
+                    </div>
+                    <img id="stop" class="button-icon" src="" alt="">
+                </button>
             </div>
         </div>
     </body>

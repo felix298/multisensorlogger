@@ -1,6 +1,8 @@
 import vlc
 import time
+import os
 import threading
+import subprocess
 from modules.config import Config
 
 class VideoPlayer(threading.Thread):
@@ -12,52 +14,44 @@ class VideoPlayer(threading.Thread):
         self.stop_playback = False
 
         # creating vlc media player object
-        self._setup_player()
+        #self._setup_player()
 
     def _setup_player(self):
         # creating vlc media player object
-        self.media_player = vlc.MediaPlayer()
-        
-        # media object
-        media = vlc.Media(self.video_path)
-        
-        # setting media to the media player
-        self.media_player.set_media(media)
+        self.instance = vlc.Instance()
+        self.media = self.instance.media_new(self.video_path)
+        self.media_player = self.instance.media_player_new()
+        self.media_player.set_media(self.media)
 
     def run(self):
+        time.sleep(5)
         self.exception = None
         _stop = self.config.get_stop()
         print("Starting Video...")
-        logFile = open(self.data_folder + "video_time.txt", 'w')
-        
-        try:
-            self.media_player.play()
-        except BaseException as e:
-            self.exception = e
-
-        if self.media_player.get_fullscreen() == 0:
-            self.exception = BaseException("Fullscreen could not be activated")
-            _stop.set()
-
+        stamp_path = self.data_folder + "video_time.txt"
+        log_file = open(stamp_path, "w" if os.path.isfile(stamp_path) else "x")
+        process = subprocess.Popen(["C:\\Program Files\\VideoLAN\\VLC\\vlc.exe", self.video_path])
+        t_control = time.time() * 1000
         while True:
-            t = time.time()
-            t_ms = int(t * 1000)
-            logFile.write(str(t_ms) + " " + str(self.media_player.get_time()) + "\n")
-            logFile.flush()
-            time.sleep(0.1)
+            t_ms = int(time.time() * 1000)
+            log_file.write(str(t_ms) + " " + str(t_ms) + "\n")
+            log_file.flush()
             if _stop.isSet():
-                self.media_player.stop()
+                process.terminate()
+                log_file.close()
                 print("Stopped Mediaplayer")
                 return
-            if self.media_player.get_time() > 27700:
+            if t_ms - t_control > 29000:
                 _stop.set()
-                self.media_player.stop()
+                process.terminate()
+                log_file.close()
                 print("Stopped Mediaplayer")
                 return
-
+            time.sleep(1/50)
 
     def join(self):
         threading.Thread.join(self)
 
         if self.exception:
+            print("Exception in VideoPlayer")
             raise self.exception

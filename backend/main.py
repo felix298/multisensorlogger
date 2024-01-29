@@ -1,5 +1,4 @@
 import os
-import threading
 import time
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
@@ -7,7 +6,7 @@ from modules.config import Config
 from modules.ecg import ECG
 from modules.camera import Camera
 from modules.video_player import VideoPlayer
-# from modules.eyetracker import EyeTracker
+from modules.eyetracker import EyeTracker
 
 app = Flask(__name__)
 CORS(app)
@@ -16,7 +15,8 @@ config = Config()
 ecg = ECG(config)
 cam = Camera(config)
 player = VideoPlayer(config)
-# tobii = EyeTracker(config)
+tobii = EyeTracker(config)
+device_connected = bool(False)
 
 @app.get("/config")
 def get_config():
@@ -38,16 +38,22 @@ def set_config():
 
 @app.get("/bluetooth")
 def bluetooth():
-    try:
+    global device_connected
+    try: 
+        device_connected = True
         return jsonify(config.refresh_device())
     except ConnectionError:
+        device_connected = False
         abort(500, description="PolarBand not found. Make sure it is turned on")
     except BaseException as e:
+        device_connected = False
         abort(500, description=str(e))
+       
 
 @app.get("/polarband")
 def polarband():
     try:
+        if not device_connected: raise ConnectionError("Polarband not connected")
         config.start_polar_stream()
         time.sleep(4)
         ecg.set_stream_info()
@@ -87,15 +93,19 @@ def heartrate():
         
 @app.get("/start")
 def start():
+    stamp_path = config.get("data_folder") + "reference_time.txt"
+    log_file = open(stamp_path, "w" if os.path.isfile(stamp_path) else "x")
+    log_file.write(str(int(time.time() * 1000)))
+    log_file.flush()
     stop = config.get_stop()
     try:
         ecg.start()
         cam.start()
-        # tobii.start()
+        tobii.start()
         player.start()
         ecg.join()
         cam.join()
-        # tobii.join()
+        tobii.join()
         player.join()
 
     except ConnectionError as e:

@@ -1,5 +1,6 @@
 import time
 import threading
+import os
 import liesl
 from liesl.files.labrecorder.cli_wrapper import LabRecorderCLI
 from modules.config import Config
@@ -11,14 +12,20 @@ class ECG(threading.Thread):
         self.data_folder = config.get("data_folder")
         self.stream_name = config.get("stream_name")
         self.info = None
-        self.labrecorder = LabRecorderCLI("backend/etc/LabRecorder/LabRecorderCLI.app/Contents/MacOS/LabRecorderCLI")
+        self.labrecorder = LabRecorderCLI("C:\\Users\\rawex\\Documents\\LabRecorder\\LabRecorderCLI.exe")
+
+    def _print_timestamp(self):
+        stamp_path = self.data_folder + "ecg_timestamp.txt"
+        log_file = open(stamp_path, "w" if os.path.isfile(stamp_path) else "x")
+        log_file.write(str(int(time.time() * 1000)))
+        log_file.flush()
 
     def set_stream_info(self):
         self.info = liesl.open_streaminfo(name=self.stream_name)
         try:
             self.streamargs = [{'name': self.info.name(), 'hostname': self.info.hostname(), 'type': self.info.type()}]
         except:
-            raise ValueError("Polarband not connected")
+            raise ConnectionError("Polarband not connected")
 
     def rec_resting(self):
         if self.info is None:
@@ -39,8 +46,10 @@ class ECG(threading.Thread):
         try:
             file_path = self.data_folder + 'heartrate.xdf'
             self.labrecorder.start_recording(file_path, streamargs=self.streamargs)
+            self._print_timestamp()
             _stop.wait()
             self.labrecorder.stop_recording()
+            print("Stopped LabRecorder")
         except BaseException as e:
             self.exception = e
 
@@ -48,4 +57,5 @@ class ECG(threading.Thread):
         threading.Thread.join(self)
         
         if self.exception:
+            print("Exception in ECG")
             raise self.exception

@@ -57,7 +57,7 @@ p > h1 {
     fill: white;
 }
 
-#bluetooth, #polarband, #tobii, #camera, #heartrate, #start {
+#bluetooth, #polarband, #tobii, #camera, #heartrate, #start, #stop {
     display: none;
 }
 
@@ -223,7 +223,7 @@ input {
 
 input[type=number] {
     display: flex;
-    width: 2ch;
+    width: 3ch;
 }
 
 input[type=file] {
@@ -256,6 +256,9 @@ select {
     background: var(--input);
     border: none;
     color: #FFF;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 
 label {
@@ -294,7 +297,7 @@ input[type=submit] {
 
 /* Hover */
 
-button:hover, #settings-button:hover, .path:hover, select:hover, input:hover {
+button:hover, #settings-button:hover, .path:hover, input:hover {
     transition: all 0.2s ease-in;
     background: var(--hover);
     cursor: pointer;

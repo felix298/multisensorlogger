@@ -50,6 +50,18 @@ const _update_settings_button_text = (participant_id, group) => {
 
 function set_settings(event) {
     event.preventDefault();
+    _set_settings()
+}
+
+function _set_settings() {
+    let participant_id = document.getElementById("participant").value
+    let group = 'A'
+    if (participant_id % 2 == 0) group = 'B'
+
+    const select = document.querySelector('#group');
+    const options = Array.from(select.options);
+    const optionToSelect = options.find(item => item.text === group);
+    optionToSelect.selected = true;
 
     fetch(url + "config", {
         method: "POST",
@@ -57,8 +69,7 @@ function set_settings(event) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            "participant_id": document.getElementById("participant").value,
-            "group": document.getElementById("group").value,
+            "participant_id": participant_id,
             "study_path": document.getElementById("study_path").value
         })
     })
@@ -117,4 +128,10 @@ function call(route) {
         icon.style.display = "none"
             show_status_label(error)
         })
+}
+
+function reset() {
+    participant_id = Number(document.getElementById("participant").value)
+    document.getElementById("participant").value = participant_id + 1
+    _set_settings()
 }
