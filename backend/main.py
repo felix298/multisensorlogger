@@ -31,6 +31,10 @@ def set_config():
     try:
         if not os.path.exists(data["study_path"]):
             abort(400, description="Study Path is not a valid path. Please use absolute paths")
+        if not os.path.exists(data["labrecorder_path"]):
+            abort(400, description="Path to Labrecorder_CLI.exe is not valid. Please use absolute paths")
+        if not os.path.exists(data["tobii_manager_path"]):
+            abort(400, description="Path to Tobii Manager.exe is not valid. Please use absolute paths")
         config.set(data)
         return jsonify(config.get())
     except BaseException as e:
@@ -85,7 +89,7 @@ def camera():
 @app.get("/heartrate")
 def heartrate():
     try:
-        ecg.rec_resting()
+        ecg.rec_reference()
     except BaseException as e:
         abort(500, description=str(e))
     else:

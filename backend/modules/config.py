@@ -12,6 +12,8 @@ class Config():
         self.device_address:str = ""
         self.device_name:str = ""
         self.stream_name = 'ECG'
+        self.labrecorder_path:str = ""
+        self.tobii_manager_path:str = ""
         self.event = threading.Event()
 
         config_object = ConfigParser()
@@ -25,6 +27,14 @@ class Config():
             print("Study Path does not exist")
             self.study_path = None
 
+        if not os.path.exists(self.labrecorder_path):
+            print("Labrecorder Path does not exist")
+            self.labrecorder_path = None
+        
+        if not os.path.exists(self.tobii_manager_path):
+            print("Tobii Manager Path does not exist")
+            self.tobii_manager_path = None
+
     def get(self, filename=None):
         ret = {
             "data_folder": self.data_folder,
@@ -34,17 +44,26 @@ class Config():
             "group": self.group,
             "participant_id": self.participant_id,
             "device_address": self.device_address,
-            "device_name": self.device_name
+            "device_name": self.device_name,
+            "labrecorder_path": self.labrecorder_path
         }
         if filename == None:
             if self.study_path is None:
                 raise ValueError("Study Path is not set. Please choose a Path in the Settings")
+            
+            if self.labrecorder_path is None:
+                raise ValueError("Labrecorder Path is not set. Please choose a Path in the Settings")
+            
+            if self.tobii_manager_path is None:
+                raise ValueError("Tobii Manager Path is not set. Please choose a Path in the Settings")
             return ret
         return ret[filename]
 
     def set(self, values):
         self.participant_id = values["participant_id"]
         self.study_path = values["study_path"]
+        self.labrecorder_path = values["labrecorder_path"]
+        self.tobii_manager_path = values["tobii_manager_path"]
         self._update_config()
 
     def refresh_device(self):
@@ -65,7 +84,9 @@ class Config():
         subprocess.Popen(["python", "backend/etc/polarstream.py", "-a", self.device_address, "-s", self.stream_name])
 
     def start_tobii_manager(self):
-        subprocess.Popen('start cmd /k "C:\\Users\\rawex\\AppData\\Local\\Programs\\TobiiProEyeTrackerManager\\TobiiProEyeTrackerManager.exe"', shell=True)
+        if self.tobii_manager_path is None:
+            raise ValueError("Tobii Manager Path is not set. Please choose a Path in the Settings")
+        subprocess.Popen('start cmd /k ' + self.tobii_manager_path, shell=True)
 
 
     def get_stop(self) -> threading.Event:
@@ -75,7 +96,9 @@ class Config():
         config_object = ConfigParser()
         config_object["STUDY"] = {
             "study_path": self.study_path,
-            "participant_id": self.participant_id
+            "participant_id": self.participant_id,
+            "labrecorder_path": self.labrecorder_path,
+            "tobii_manager_path": self.tobii_manager_path
         }
         with open("backend/etc/config.ini", "w") as conf:
             config_object.write(conf)

@@ -43,6 +43,30 @@
                         </div>
                         <input type="text" class="path" id="study_path" value="paste in path">
                     </div>
+                    <div class="input-wrapper">
+                        <div class="item-wrapper">
+                            <label>Labrecorder_CLI Path</label>
+                            <div class="tooltip">
+                                <img id="info" src="icons/info.svg">
+                                <span class="tooltip-text">
+                                    Due to limitations it is necessary that you manually copy the path of your Labrecorder_CLI installation into the input 
+                                </span>
+                            </div>
+                        </div>
+                        <input type="text" class="path" id="labrecorder_path" value="paste in path">
+                    </div>
+                    <div class="input-wrapper">
+                        <div class="item-wrapper">
+                            <label>Tobii Manager Path</label>
+                            <div class="tooltip">
+                                <img id="info" src="icons/info.svg">
+                                <span class="tooltip-text">
+                                    Due to limitations it is necessary that you manually copy the path of your Tobii Manager installation into the input 
+                                </span>
+                            </div>
+                        </div>
+                        <input type="text" class="path" id="tobii_manager_path" value="paste in path">
+                    </div>
                     <input type="submit" value="Save">
                 </form>
             </div>
@@ -90,7 +114,7 @@
                     <button onclick="call('heartrate')">
                         <div class="button_text">
                             <p class="label">5</p>
-                            Measure Resting Heartrate
+                            Measure Reference Heartrate
                         </div>
                         <img id="heartrate" class="button-icon" src="" alt="">
                     </button>

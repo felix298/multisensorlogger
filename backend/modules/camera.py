@@ -8,7 +8,7 @@ class Camera(threading.Thread):
     def __init__(self, config:Config):
         threading.Thread.__init__(self)
         self.config = config
-        self.data_folder = config.get("data_folder")
+        self.data_folder = self.config.get("data_folder")
         self.width = 1920
         self.height = 1080
         self.fps = 60.0

@@ -17,6 +17,12 @@ const get_settings = obj => {
     if (!(obj["study_path"] === undefined)) {
         document.getElementById("study_path").value = obj["study_path"]
     }
+    if (!(obj["labrecorder_path"] === undefined)) {
+        document.getElementById("labrecorder_path").value = obj["labrecorder_path"]
+    }
+    if (!(obj["tobii_manager_path"] === undefined)) {
+        document.getElementById("tobii_manager_path").value = obj["tobii_manager_path"]
+    }
 }
 
 const show_status_label = (message, success = false) => {
@@ -70,7 +76,9 @@ function _set_settings() {
         },
         body: JSON.stringify({
             "participant_id": participant_id,
-            "study_path": document.getElementById("study_path").value
+            "study_path": document.getElementById("study_path").value,
+            "labrecorder_path": document.getElementById("labrecorder_path").value,
+            "tobii_manager_path": document.getElementById("tobii_manager_path").value
         })
     })
     .then(response => {
