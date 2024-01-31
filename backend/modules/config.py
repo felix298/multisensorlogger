@@ -19,6 +19,8 @@ class Config():
         config_object = ConfigParser()
         config_object.read('backend/etc/config.ini')
         self.study_path = config_object.get('STUDY', 'study_path')
+        self.labrecorder_path = config_object.get('STUDY', 'labrecorder_path')
+        self.tobii_manager_path = config_object.get('STUDY', 'tobii_manager_path')
         self.participant_id = config_object.get('STUDY', 'participant_id')
 
         self._create_video_and_data_folder_path()
