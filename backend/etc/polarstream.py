@@ -95,7 +95,7 @@ def convert_to_unsigned_long(data, offset, length):
 
 
 ## ASynchronous task to start the data stream for ECG ##
-async def run(client:BleakClient, debug=False):
+async def run(client, debug=False):
 
     print("---------Looking for Device------------ ", flush=True)
 

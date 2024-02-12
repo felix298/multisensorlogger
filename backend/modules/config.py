@@ -47,7 +47,8 @@ class Config():
             "participant_id": self.participant_id,
             "device_address": self.device_address,
             "device_name": self.device_name,
-            "labrecorder_path": self.labrecorder_path
+            "labrecorder_path": self.labrecorder_path,
+            "tobii_manager_path": self.tobii_manager_path
         }
         if filename == None:
             if self.study_path is None:
@@ -83,7 +84,7 @@ class Config():
         raise ConnectionError
 
     def start_polar_stream(self):
-        subprocess.Popen(["python", "backend/etc/polarstream.py", "-a", self.device_address, "-s", self.stream_name])
+        subprocess.Popen(["python", "backend/etc/polarstream.py", "-a", self.device_address, "-s", self.stream_name], shell=True)
 
     def start_tobii_manager(self):
         if self.tobii_manager_path is None:
