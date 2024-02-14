@@ -34,7 +34,7 @@ class ECG(threading.Thread):
 
         file_path = self.data_folder + 'reference_heartrate.xdf' 
         self.labrecorder.start_recording(file_path, streamargs=self.streamargs)
-        time.sleep(60)
+        time.sleep(40)
         self.labrecorder.stop_recording()
 
     def run(self):

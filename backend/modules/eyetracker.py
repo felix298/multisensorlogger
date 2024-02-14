@@ -11,10 +11,14 @@ class EyeTracker(threading.Thread):
         self.eyetracker = None
 
     def gaze_data_callback(self, gaze_data):
-        msg = "{gaze_left_eye};{gaze_right_eye}".format(gaze_left_eye=gaze_data['left_gaze_point_on_display_area'], gaze_right_eye=gaze_data['right_gaze_point_on_display_area'])
         t_ms = int(time.time() * 1000)
+        msg = {
+            "time": t_ms,
+            "gaze": gaze_data
+        }
+        # msg = "{gaze_left_eye};{gaze_right_eye}".format(gaze_left_eye=gaze_data['left_gaze_point_on_display_area'], gaze_right_eye=gaze_data['right_gaze_point_on_display_area'])
         with open(self.data_folder + 'tobii.txt', "a" if os.path.isfile(self.data_folder + 'tobii.txt') else "x") as f:
-            f.write(f'{t_ms}\n{msg}\n')
+            f.write(f'{msg}\n')
 
     def run(self):
         self.exception = None

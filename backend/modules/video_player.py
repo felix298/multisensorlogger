@@ -34,14 +34,14 @@ class VideoPlayer(threading.Thread):
         t_control = time.time() * 1000
         while True:
             t_ms = int(time.time() * 1000)
-            log_file.write(str(t_ms) + " " + str(t_ms) + "\n")
+            log_file.write(str(t_ms) + "\n")
             log_file.flush()
             if _stop.isSet():
                 process.terminate()
                 log_file.close()
                 print("Stopped Mediaplayer")
                 return
-            if t_ms - t_control > 29000:
+            if t_ms - t_control > 34200:
                 _stop.set()
                 process.terminate()
                 log_file.close()
