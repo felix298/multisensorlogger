@@ -13,14 +13,13 @@ class Camera(threading.Thread):
         self.height = 1080
         self.fps = 60.0
 
+    def test(self):
         self.cap = cv2.VideoCapture(0)
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
         self.cap.set(cv2.CAP_PROP_FPS, self.fps)
         self.fourcc = cv2.VideoWriter.fourcc(*'mp4v')
         self.out = cv2.VideoWriter(self.data_folder + "camera_output.mp4", self.fourcc, self.fps, (self.width, self.height))
-
-    def test(self):
         print("Testing Camera")
         ret, frame = self.cap.read()
         if not ret:
