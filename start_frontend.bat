@@ -1,0 +1,1 @@
+"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe" file:///C:/Users/rawex/Documents/multisensorlogger/frontend/index.html

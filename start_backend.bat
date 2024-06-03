@@ -1,0 +1,1 @@
+call "C:/Users/rawex/anaconda3/Scripts/activate.bat" Lab & cd "C:\Users\rawex\Documents\multisensorlogger" & python backend/main.py
